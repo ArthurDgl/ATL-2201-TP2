@@ -98,6 +98,10 @@ public class Vecteur {
         return true;
     }
 
+    public boolean estNul() {
+        return this.estEgal(new Vecteur(this.dimension));
+    }
+
     public boolean estOrthogonal(final Vecteur autre) {
         return Vecteur.sontEnvironEgales(0.0, this.produitScalaire(autre));
     }
@@ -110,6 +114,8 @@ public class Vecteur {
     }
 
     public boolean estColineaire(final Vecteur autre) {
+        if (this.estNul() || autre.estNul()) return true;
+
         double ratio = findRatio(autre);
         Vecteur toCheck = new Vecteur(autre);
         toCheck.multiplicationScalaire(ratio);
