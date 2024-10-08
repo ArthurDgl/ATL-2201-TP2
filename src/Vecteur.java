@@ -121,4 +121,9 @@ public class Vecteur {
         toCheck.multiplicationScalaire(ratio);
         return this.estEgal(toCheck);
     }
+
+    public boolean estCoplanaire3d(final Vecteur autre1, final Vecteur autre2) {
+        Vecteur normal = autre1.produitVectoriel3d(autre2);
+        return this.estOrthogonal(normal);
+    }
 }
