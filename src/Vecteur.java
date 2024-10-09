@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Vecteur {
     public static double EPSILON = 0.00000000001;
     public static boolean sontEnvironEgales(final double premier, final double deuxieme) {
@@ -11,17 +13,19 @@ public class Vecteur {
      * Constructeur permettant de créer une instance de la classe Vecteur grâce à un tableau de valeurs.
      * @param composantes Le tableau de valeurs qui deviendra les composantes du vecteur
      */
-    public Vecteur(final double[] composantes) {
+    public Vecteur(final double[] composantes) throws Exception {
         this.dimension = composantes.length;
-        this.composantes = java.util.Arrays.copyOf(composantes, composantes.length);
+        if (dimension < 2) throw new Exception("La dimension doit être supérieure ou égale à 2");
+        this.composantes = Arrays.copyOf(composantes, composantes.length);
     }
 
     /**
      * Constructeur permettant de créer une instance de la classe Vecteur grâce à une dimension, toutes les composantes seront initialisées à 0.
      * @param dimension L'entier représentant la dimension du vecteur
      */
-    public Vecteur(final int dimension) {
+    public Vecteur(final int dimension) throws Exception {
         this.dimension = dimension;
+        if (dimension < 2) throw new Exception("La dimension doit être supérieure ou égale à 2, dimension utilisée : " + dimension);
         this.composantes = new double[dimension];
         java.util.Arrays.fill(this.composantes, 0);
     }
@@ -30,7 +34,7 @@ public class Vecteur {
      * Constructeur permettant d'effectuer la copie d'un vecteur en copiant ses composantes.
      * @param autre Le vecteur à copier
      */
-    public Vecteur(final Vecteur autre) {
+    public Vecteur(final Vecteur autre) throws Exception {
         this(autre.composantes);
     }
 
@@ -128,7 +132,8 @@ public class Vecteur {
      * Procédure permettant d'ajouter un vecteur à l'instance actuelle par somme vectorielle.
      * @param autre Le vecteur à ajouter
      */
-    public void sommeVectorielle(final Vecteur autre) {
+    public void sommeVectorielle(final Vecteur autre) throws Exception {
+        if (this.dimension != autre.dimension) throw new Exception("Les deux vecteurs doivent avoir la même dimension");
         for (int i = 0; i < this.dimension; i++) {
             this.composantes[i] += autre.composantes[i];
         }
@@ -139,7 +144,8 @@ public class Vecteur {
      * @param autre L'autre vecteur
      * @return Le produit scalaire
      */
-    public double produitScalaire(final Vecteur autre) {
+    public double produitScalaire(final Vecteur autre) throws Exception {
+        if (this.dimension != autre.dimension) throw new Exception("Les deux vecteurs doivent avoir la même dimension");
         double somme = 0;
         for (int i = 0; i < this.dimension; i++) {
             somme += this.composantes[i] * autre.composantes[i];
@@ -153,7 +159,7 @@ public class Vecteur {
      * @param autre L'autre vecteur
      * @return Le produit vectoriel (un vecteur de dimension 3)
      */
-    public Vecteur produitVectoriel3d(final Vecteur autre) {
+    public Vecteur produitVectoriel3d(final Vecteur autre) throws Exception {
         if (this.dimension != 3 || autre.dimension != 3) return null;
         
         double[] produit = {this.composantes[1]*autre.composantes[2]-autre.composantes[1]*this.composantes[2],this.composantes[2]*autre.composantes[0]-this.composantes[0]*autre.composantes[2],this.composantes[0]*autre.composantes[1]-this.composantes[1]*autre.composantes[0]};
@@ -165,7 +171,8 @@ public class Vecteur {
      * @param autre L'autre vecteur
      * @return La valeur booléenne du test d'égalité
      */
-    public boolean estEgal(final Vecteur autre) {
+    public boolean estEgal(final Vecteur autre) throws Exception {
+        if (this.dimension != autre.dimension) throw new Exception("Les deux vecteurs doivent avoir la même dimension");
         for (int i = 0; i < this.dimension; i++) {
             if (!sontEnvironEgales(this.composantes[i], autre.composantes[i])) return false;
         }
@@ -176,7 +183,7 @@ public class Vecteur {
      * Méthode permettant de savoir si le vecteur est nul.
      * @return La valeur booléenne du test de nullité
      */
-    public boolean estNul() {
+    public boolean estNul() throws Exception {
         return this.estEgal(new Vecteur(this.dimension));
     }
 
@@ -185,7 +192,7 @@ public class Vecteur {
      * @param autre L'autre vecteur
      * @return La valeur booléenne du test d'orthogonalité
      */
-    public boolean estOrthogonal(final Vecteur autre) {
+    public boolean estOrthogonal(final Vecteur autre) throws Exception {
         return Vecteur.sontEnvironEgales(0.0, this.produitScalaire(autre));
     }
 
@@ -207,7 +214,7 @@ public class Vecteur {
      * @param autre L'autre vecteur
      * @return La valeur booléenne du test de colinéarité
      */
-    public boolean estColineaire(final Vecteur autre) {
+    public boolean estColineaire(final Vecteur autre) throws Exception {
         return Vecteur.sontEnvironEgales(Math.abs(this.produitScalaire(autre)), this.norme()*autre.norme());
     }
 //    VERSION EN CALCULANT LES RATIOS ENTRE LES COMPOSANTES
@@ -228,7 +235,7 @@ public class Vecteur {
      * @param autre2 Le deuxième autre vecteur
      * @return La valeur booléenne du test de coplanarité
      */
-    public boolean estCoplanaire3d(final Vecteur autre1, final Vecteur autre2) {
+    public boolean estCoplanaire3d(final Vecteur autre1, final Vecteur autre2) throws Exception {
         Vecteur normal = autre1.produitVectoriel3d(autre2);
         return this.estOrthogonal(normal);
     }
