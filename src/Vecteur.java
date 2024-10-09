@@ -208,13 +208,19 @@ public class Vecteur {
      * @return La valeur booléenne du test de colinéarité
      */
     public boolean estColineaire(final Vecteur autre) {
-        if (this.estNul() || autre.estNul()) return true;
-
-        double ratio = findRatio(autre);
-        Vecteur toCheck = new Vecteur(autre);
-        toCheck.multiplicationScalaire(ratio);
-        return this.estEgal(toCheck);
+        return Vecteur.sontEnvironEgales(Math.abs(this.produitScalaire(autre)), this.norme()*autre.norme());
     }
+//    VERSION EN CALCULANT LES RATIOS ENTRE LES COMPOSANTES
+//    public boolean estColineaire(final Vecteur autre) {
+//        if (this.estNul() || autre.estNul()) return true;
+//
+//        double ratio = findRatio(autre);
+//        Vecteur toCheck = new Vecteur(autre);
+//        toCheck.multiplicationScalaire(ratio);
+//        return this.estEgal(toCheck);
+//    }
+
+
 
     /**
      * Méthode permettant de savoir si l'instance actuelle est coplanaire avec deux autres vecteurs.
